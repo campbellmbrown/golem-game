@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using golemgame.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -30,6 +31,8 @@ namespace golemgame
         }
         public static Random r;
 
+        public static PlayerManager playerManager { get; set; } // TODO - move to game manager?
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -57,6 +60,8 @@ namespace golemgame
             textures = new Dictionary<string, Texture2D>()
             {
             };
+
+            playerManager = new PlayerManager();
         }
 
 
@@ -73,6 +78,7 @@ namespace golemgame
         protected override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(backgroundColor);
+            playerManager.Draw(spriteBatch);
             // TODO: replace this with a cursor
             spriteBatch.DrawPoint(mousePosition, Color.White);
             spriteBatch.End();
