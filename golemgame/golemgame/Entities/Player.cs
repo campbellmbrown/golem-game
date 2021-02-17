@@ -10,7 +10,7 @@ namespace golemgame.Entities
 {
     public class Player : MovingEntity
     {
-        public Player() : base(new Sprite(), Vector2.Zero)
+        public Player() : base(new Sprite(Game1.animations["player_idle_left"]), Vector2.Zero)
         {
         }
     }
