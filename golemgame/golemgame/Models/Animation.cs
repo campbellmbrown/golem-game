@@ -9,11 +9,11 @@ namespace golemgame.Models
 {
     public class Animation
     {
-        public int frameCount { get; private set; }
+        public Texture2D texture { get; private set; }
         public float frameSpeed { get; private set; }
+        public int frameCount { get; private set; }
         public int frameHeight { get { return texture.Height; } }
         public int frameWidth { get { return texture.Width / frameCount; } }
-        private Texture2D texture { get; set; }
 
         public Animation(Texture2D texture, int frameCount, float frameSpeed)
         {
