@@ -1,4 +1,5 @@
 ﻿using golemgame.Managers;
+using golemgame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,6 +16,7 @@ namespace golemgame
         private Color backgroundColor { get; set; }
 
         public static Dictionary<string, Texture2D> textures { get; set; }
+        public static Dictionary<string, Animation> animations { get; set; }
 
         public static Camera2D camera { get; set; }
         public static Vector2 screenSize { get { return new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height); } }
@@ -60,6 +62,10 @@ namespace golemgame
             textures = new Dictionary<string, Texture2D>()
             {
             };
+            animations = new Dictionary<string, Animation>()
+            {
+                { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
+            };
 
             playerManager = new PlayerManager();
         }
@@ -72,6 +78,7 @@ namespace golemgame
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+            playerManager.Update(gameTime);
             base.Update(gameTime);
         }
 

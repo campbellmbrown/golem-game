@@ -1,4 +1,5 @@
 ﻿using golemgame.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace golemgame.Managers
         public PlayerManager()
         {
             player = new Player();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            player.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)

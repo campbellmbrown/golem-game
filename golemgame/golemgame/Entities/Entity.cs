@@ -20,6 +20,11 @@ namespace golemgame.Entities
             this.position = position;
         }
 
+        public virtual void Update(GameTime gameTime)
+        {
+            sprite.Update(gameTime);
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             sprite.Draw(spriteBatch, position);
