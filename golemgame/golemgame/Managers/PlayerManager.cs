@@ -36,9 +36,9 @@ namespace golemgame.Managers
             player.Draw(spriteBatch);
         }
 
-        public void MovePlayerUp() { player.MoveUp(); }
-        public void MovePlayerDown() { player.MoveDown(); }
-        public void MovePlayerLeft() { player.MoveLeft(); }
+        public void MovePlayerUp()    { player.MoveUp();    }
+        public void MovePlayerDown()  { player.MoveDown();  }
+        public void MovePlayerLeft()  { player.MoveLeft();  }
         public void MovePlayerRight() { player.MoveRight(); }
     }
 }

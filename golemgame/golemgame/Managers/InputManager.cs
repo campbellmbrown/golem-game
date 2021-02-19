@@ -35,6 +35,8 @@ namespace golemgame.Managers
             float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
             KeyboardState keyboardState = Keyboard.GetState();
 
+            // For each stored input, check if this key is pressed,
+            // then execute complete corresponding action
             foreach (var inputAndOutput in inputsAndOutputs)
             {
                 if (keyboardState.IsKeyDown(inputAndOutput.inputKey))
