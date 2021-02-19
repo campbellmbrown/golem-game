@@ -19,8 +19,10 @@ namespace golemgame.Managers
         {
             player = new Player();
             inputManager = new InputManager();
-            inputManager.AddInputAndMethod(Keys.E, DoSomething1);
-            inputManager.AddInputAndMethod(Keys.Q, DoSomething2);
+            inputManager.AddInputAndMethod(Keys.W, MovePlayerUp);
+            inputManager.AddInputAndMethod(Keys.S, MovePlayerDown);
+            inputManager.AddInputAndMethod(Keys.A, MovePlayerLeft);
+            inputManager.AddInputAndMethod(Keys.D, MovePlayerRight);
         }
 
         public void Update(GameTime gameTime)
@@ -34,15 +36,9 @@ namespace golemgame.Managers
             player.Draw(spriteBatch);
         }
 
-        public void DoSomething1()
-        {
-            Console.WriteLine("Doing first something");
-        }
-
-        public void DoSomething2()
-        {
-            Console.WriteLine("Doing second something");
-
-        }
+        public void MovePlayerUp() { player.MoveUp(); }
+        public void MovePlayerDown() { player.MoveDown(); }
+        public void MovePlayerLeft() { player.MoveLeft(); }
+        public void MovePlayerRight() { player.MoveRight(); }
     }
 }
