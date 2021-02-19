@@ -1,6 +1,7 @@
 ﻿using golemgame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,36 @@ namespace golemgame.Managers
     public class PlayerManager
     {
         protected Player player { get; set; }
+        protected InputManager inputManager { get; set; }
 
         public PlayerManager()
         {
             player = new Player();
+            inputManager = new InputManager();
+            inputManager.AddInputAndMethod(Keys.E, DoSomething1);
+            inputManager.AddInputAndMethod(Keys.Q, DoSomething2);
         }
 
         public void Update(GameTime gameTime)
         {
+            inputManager.Update(gameTime);
             player.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             player.Draw(spriteBatch);
+        }
+
+        public void DoSomething1()
+        {
+            Console.WriteLine("Doing first something");
+        }
+
+        public void DoSomething2()
+        {
+            Console.WriteLine("Doing second something");
+
         }
     }
 }
