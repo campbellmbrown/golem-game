@@ -11,11 +11,11 @@ namespace golemgame.Managers
 {
     public class AnimationManager
     {
-        private Animation animation { get; set; }
-        private float timer { get; set; }
-        private int frameCount { get; set; }
-        private float frameSpeed { get; set; }
-        private int currentFrame { get; set; }
+        private Animation _animation { get; set; }
+        private float _timer { get; set; }
+        private int _frameCount { get; set; }
+        private float _frameSpeed { get; set; }
+        private int _currentFrame { get; set; }
 
         public AnimationManager(Animation animation)
         {
@@ -26,22 +26,22 @@ namespace golemgame.Managers
         {
             // frameCount and frameSpeed are copied so more than one
             // of the same animation can exist
-            this.animation = animation;
-            frameCount = animation.frameCount;
-            frameSpeed = animation.frameSpeed;
-            currentFrame = 0;
-            timer = 0f;
+            this._animation = animation;
+            _frameCount = animation.frameCount;
+            _frameSpeed = animation.frameSpeed;
+            _currentFrame = 0;
+            _timer = 0f;
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            Rectangle rectangle = new Rectangle(currentFrame * animation.frameWidth, 0, animation.frameWidth, animation.frameHeight);
-            spriteBatch.Draw(animation.texture, position, rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            Rectangle rectangle = new Rectangle(_currentFrame * _animation.frameWidth, 0, _animation.frameWidth, _animation.frameHeight);
+            spriteBatch.Draw(_animation.texture, position, rectangle, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         public void Play(Animation animation)
         {
-            if (this.animation != animation)
+            if (this._animation != animation)
             {
                 ResetAnimation(animation);
             }
@@ -49,22 +49,22 @@ namespace golemgame.Managers
 
         public void Update(GameTime gameTime)
         {
-            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (timer > frameSpeed)
+            _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_timer > _frameSpeed)
             {
-                timer -= frameSpeed;
-                currentFrame++;
-                if (currentFrame >= frameCount)
+                _timer -= _frameSpeed;
+                _currentFrame++;
+                if (_currentFrame >= _frameCount)
                 {
-                    currentFrame = 0;
+                    _currentFrame = 0;
                 }
             }
         }
 
         public void Reset()
         {
-            currentFrame = 0;
-            timer = 0;
+            _currentFrame = 0;
+            _timer = 0;
         }
     }
 }

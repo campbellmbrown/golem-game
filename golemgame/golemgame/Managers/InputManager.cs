@@ -11,7 +11,7 @@ namespace golemgame.Managers
     public class InputManager
     {
         public delegate void MethodDelegate();
-        private List<InputAndOutput> inputsAndOutputs { get; set; }
+        private List<InputAndOutput> _inputsAndOutputs { get; set; }
 
         private struct InputAndOutput
         {
@@ -27,7 +27,7 @@ namespace golemgame.Managers
 
         public InputManager()
         {
-            inputsAndOutputs = new List<InputAndOutput>();
+            _inputsAndOutputs = new List<InputAndOutput>();
         }
 
         public void Update(GameTime gameTime)
@@ -37,7 +37,7 @@ namespace golemgame.Managers
 
             // For each stored input, check if this key is pressed,
             // then execute complete corresponding action
-            foreach (var inputAndOutput in inputsAndOutputs)
+            foreach (var inputAndOutput in _inputsAndOutputs)
             {
                 if (keyboardState.IsKeyDown(inputAndOutput.inputKey))
                 {
@@ -48,7 +48,7 @@ namespace golemgame.Managers
 
         public void AddInputAndMethod(Keys inputKey, MethodDelegate func)
         {
-            inputsAndOutputs.Add(new InputAndOutput(inputKey, func));
+            _inputsAndOutputs.Add(new InputAndOutput(inputKey, func));
         }
     }
 }
