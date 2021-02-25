@@ -11,11 +11,11 @@ namespace golemgame.Managers
 {
     public class AnimationManager
     {
-        private Animation _animation { get; set; }
-        private float _timer { get; set; }
-        private int _frameCount { get; set; }
-        private float _frameSpeed { get; set; }
-        private int _currentFrame { get; set; }
+        private Animation _animation;
+        private float _timer;
+        private int _frameCount;
+        private float _frameSpeed;
+        private int _currentFrame;
 
         public AnimationManager(Animation animation)
         {

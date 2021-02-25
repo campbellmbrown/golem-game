@@ -11,7 +11,8 @@ namespace golemgame.Managers
     public class InputManager
     {
         public delegate void MethodDelegate();
-        private List<InputAndOutput> _inputsAndOutputs { get; set; }
+
+        private List<InputAndOutput> _inputsAndOutputs;
 
         private struct InputAndOutput
         {
