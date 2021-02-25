@@ -11,9 +11,9 @@ namespace golemgame
 {
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics { get; set; }
-        private SpriteBatch spriteBatch { get; set; }
-        private Color backgroundColor { get; set; }
+        GraphicsDeviceManager _graphics { get; set; }
+        private SpriteBatch _spriteBatch { get; set; }
+        private Color _backgroundColor { get; set; }
 
         public static Dictionary<string, Texture2D> textures { get; set; }
         public static Dictionary<string, Animation> animations { get; set; }
@@ -31,26 +31,26 @@ namespace golemgame
                 return Vector2.Transform(new Vector2(_mousePos.X, _mousePos.Y), camera.GetInverseViewMatrix());
             }
         }
-        public static Random r;
+        public static Random random;
 
         public static PlayerManager playerManager { get; set; } // TODO - move to game manager?
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = (int)screenSize.X;
-            graphics.PreferredBackBufferHeight = (int)screenSize.Y;
-            graphics.IsFullScreen = false;
-            r = new Random();
+            _graphics.PreferredBackBufferWidth = (int)screenSize.X;
+            _graphics.PreferredBackBufferHeight = (int)screenSize.Y;
+            _graphics.IsFullScreen = false;
+            random = new Random();
         }
 
         protected override void Initialize()
         {
             IsMouseVisible = false;
             IsFixedTimeStep = true;
-            graphics.SynchronizeWithVerticalRetrace = true;
-            backgroundColor = new Color(48, 48, 61);
+            _graphics.SynchronizeWithVerticalRetrace = true;
+            _backgroundColor = new Color(48, 48, 61);
             // TODO - change this
             camera = new Camera2D(GraphicsDevice) { Zoom = 3, Position = (new Vector2(300, 210) - windowSize) / 2f };
             base.Initialize();
@@ -58,7 +58,7 @@ namespace golemgame
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             textures = new Dictionary<string, Texture2D>()
             {
             };
@@ -84,11 +84,11 @@ namespace golemgame
 
         protected override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(backgroundColor);
-            playerManager.Draw(spriteBatch);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
+            playerManager.Draw(_spriteBatch);
             // TODO: replace this with a cursor
-            spriteBatch.DrawPoint(mousePosition, Color.White);
-            spriteBatch.End();
+            _spriteBatch.DrawPoint(mousePosition, Color.White);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
