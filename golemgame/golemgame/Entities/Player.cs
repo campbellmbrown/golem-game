@@ -16,22 +16,22 @@ namespace golemgame.Entities
 
         public void MoveUp()
         {
-            velocity.Y -= 50;
+            AddToVelocity(0, -50);
         }
 
         public void MoveDown()
         {
-            velocity.Y += 50;
+            AddToVelocity(0, 50);
         }
 
         public void MoveLeft()
         {
-            velocity.X -= 50;
+            AddToVelocity(-50, 0);
         }
 
         public void MoveRight()
         {
-            velocity.X += 50;
+            AddToVelocity(50, 0);
         }
     }
 

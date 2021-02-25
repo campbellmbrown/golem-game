@@ -11,7 +11,7 @@ namespace golemgame.Entities
 {
     public class Entity
     {
-        protected Sprite sprite { get; set; }
+        protected Sprite sprite { get; }
         protected Vector2 position { get; set; }
 
         public Entity(Sprite sprite, Vector2 position)

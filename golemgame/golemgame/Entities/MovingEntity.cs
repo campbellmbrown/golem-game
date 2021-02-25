@@ -10,7 +10,7 @@ namespace golemgame.Entities
 {
     public class MovingEntity : Entity
     {
-        protected Vector2 velocity;
+        protected Vector2 velocity { get; set; }
 
         public MovingEntity(Sprite sprite, Vector2 position) : base(sprite, position)
         {
@@ -27,6 +27,11 @@ namespace golemgame.Entities
         protected void Move(float deltaT)
         {
             position += velocity * deltaT;
+        }
+
+        protected void AddToVelocity(float deltaX, float deltaY)
+        {
+            velocity = new Vector2(velocity.X + deltaX, velocity.Y + deltaY);
         }
     }
 }

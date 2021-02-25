@@ -20,8 +20,8 @@ namespace golemgame.Models
 
         private Texture2D _texture;
         private Animation _animation; // TODO: Review if this needs to be here
-        private AnimationManager _animationManager { get; set; }
-        private Visual _visualType { get; set; }
+        private AnimationManager _animationManager;
+        private Visual _visualType;
 
         public Sprite(Texture2D texture)
         {

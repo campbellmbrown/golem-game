@@ -12,8 +12,8 @@ namespace golemgame.Managers
 {
     public class PlayerManager
     {
-        protected Player player { get; set; }
-        protected InputManager inputManager { get; set; }
+        protected Player player { get; }
+        protected InputManager inputManager { get; }
 
         public PlayerManager()
         {
