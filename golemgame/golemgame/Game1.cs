@@ -33,7 +33,8 @@ namespace golemgame
         }
         public static Random random;
 
-        public static PlayerManager playerManager { get; set; } // TODO - move to game manager?
+        private PlayerManager _playerManager { get; set; } // TODO - move to game manager?
+        private CursorManager _cursorManager { get; set; } // TODO - move to game manager?
 
         public Game1()
         {
@@ -61,13 +62,15 @@ namespace golemgame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             textures = new Dictionary<string, Texture2D>()
             {
+                { "cursor", Content.Load<Texture2D>("gui/cursor") },
             };
             animations = new Dictionary<string, Animation>()
             {
                 { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
             };
 
-            playerManager = new PlayerManager();
+            _playerManager = new PlayerManager();
+            _cursorManager = new CursorManager();
         }
 
 
@@ -78,16 +81,16 @@ namespace golemgame
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            playerManager.Update(gameTime);
+            _playerManager.Update(gameTime);
+            _cursorManager.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
-            playerManager.Draw(_spriteBatch);
-            // TODO: replace this with a cursor
-            _spriteBatch.DrawPoint(mousePosition, Color.White);
+            _playerManager.Draw(_spriteBatch);
+            _cursorManager.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

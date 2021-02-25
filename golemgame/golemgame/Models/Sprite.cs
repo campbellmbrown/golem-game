@@ -25,13 +25,13 @@ namespace golemgame.Models
 
         public Sprite(Texture2D texture)
         {
-            this._texture = texture;
+            _texture = texture;
             _visualType = Visual.Texture;
         }
 
         public Sprite(Animation animation)
         {
-            this._animation = animation;
+            _animation = animation;
             _animationManager = new AnimationManager(animation);
             _visualType = Visual.Animation;
         }
@@ -49,7 +49,7 @@ namespace golemgame.Models
             switch (_visualType)
             {
                 case Visual.Texture:
-                    spriteBatch.DrawRectangle(new Rectangle((int)position.X, (int)position.Y, 10, 10), Color.White);
+                    spriteBatch.Draw(_texture, position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                     break;
                 case Visual.Animation:
                     _animationManager.Draw(spriteBatch, position);
