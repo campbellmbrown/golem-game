@@ -1,4 +1,4 @@
-﻿using golemgame.Managers;
+using golemgame.Managers;
 using golemgame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -61,6 +61,7 @@ namespace golemgame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             textures = new Dictionary<string, Texture2D>()
             {
+                { "cursor", Content.Load<Texture2D>("gui/cursor") },
             };
             animations = new Dictionary<string, Animation>()
             {
