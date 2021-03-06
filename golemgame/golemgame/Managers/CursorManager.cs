@@ -9,13 +9,21 @@ using System.Threading.Tasks;
 
 namespace golemgame.Managers
 {
-    public class CursorManager
+    interface ICursorManager
+    {
+        void Update(GameTime gameTime);
+        void Draw(SpriteBatch spriteBatch);
+    }
+
+    public class CursorManager : ICursorManager
     {
         private Cursor _cursor;
+        private Game1 _game;
 
-        public CursorManager()
+        public CursorManager(Game1 game)
         {
             _cursor = new Cursor();
+            _game = game;
         }
 
         public void Update(GameTime gameTime)

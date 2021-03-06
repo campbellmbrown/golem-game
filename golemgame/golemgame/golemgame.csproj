@@ -48,6 +48,7 @@
     <Compile Include="Gui\Cursor.cs" />
     <Compile Include="Managers\AnimationManager.cs" />
     <Compile Include="Managers\CursorManager.cs" />
+    <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Models\Animation.cs" />

@@ -69,10 +69,16 @@ namespace golemgame
                 { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
             };
 
-            _playerManager = new PlayerManager();
-            _cursorManager = new CursorManager();
+            _playerManager = new PlayerManager(this);
+            _cursorManager = new CursorManager(this);
+            RegisterServices();
         }
 
+        private void RegisterServices()
+        {
+            Services.AddService(typeof(ICursorManager), _cursorManager);
+            Services.AddService(typeof(IPlayerManager), _playerManager);
+        }
 
         protected override void UnloadContent()
         {
@@ -90,7 +96,10 @@ namespace golemgame
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
             _playerManager.Draw(_spriteBatch);
-            _cursorManager.Draw(_spriteBatch);
+            IPlayerManager playerManager = (IPlayerManager)Services.GetService(typeof(IPlayerManager));
+            playerManager.Draw(_spriteBatch);
+            ICursorManager cursorManager = (ICursorManager)Services.GetService(typeof(ICursorManager));
+            cursorManager.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
