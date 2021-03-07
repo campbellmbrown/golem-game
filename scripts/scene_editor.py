@@ -1,7 +1,7 @@
 # scene_editor.py
 
 import PySimpleGUI as sg
-import PIL
+from PIL import Image
 import os.path
 import io
 
@@ -23,9 +23,7 @@ class SceneEditorGUI:
             [sg.Button("Exit")],
         ]
         
-        image_viewer_column = [
-            [sg.Image(key="-IMAGE-")],
-        ]
+        image_viewer_column = [[sg.Image(key="-IMAGE_" + str(i) + "_" + str(j) + "_", pad=(0,0)) for j in range(32)] for i in range(32)]
 
         layout = [
             [
@@ -37,10 +35,9 @@ class SceneEditorGUI:
         return layout
 
     def convert_to_bytes(self, file_path, resize=None):
-        print(file_path)
-        img = PIL.Image.open(file_path)
+        img = Image.open(file_path)
+        print(img.size)
         cur_width, cur_height = img.size
-        print("Width: {}".format(cur_width))
         if resize:
             new_width, new_height = resize
             scale = min(new_height/cur_height, new_width/cur_width)
@@ -58,8 +55,7 @@ class SceneEditorGUI:
             if event == "-FOLDER-":
                 folder = values["-FOLDER-"]
                 try:
-                    # Get list of files in folder
-                    file_list = os.listdir(folder)
+                    file_list = os.listdir(folder)  # Get list of files in folder
                 except:
                     file_list = []
 
@@ -71,15 +67,13 @@ class SceneEditorGUI:
                 ]
                 self.window["-FILE LIST-"].update(fnames)
             elif event == "-FILE LIST-":  # A file was chosen from the listbox
-                try:
-                    filename = os.path.join(
-                        values["-FOLDER-"], values["-FILE LIST-"][0]
-                    )
-                    print(filename)
-                    print(type(filename))
-                    self.window["-IMAGE-"].update(data=self.convert_to_bytes(filename))
-                except:
-                    pass
+                # try:
+                filename = os.path.join(values["-FOLDER-"], values["-FILE LIST-"][0])
+                for i in range(32):
+                    for j in range(32):
+                        self.window["-IMAGE_" + str(i) + "_" + str(j) + "_"].update(data=self.convert_to_bytes(filename))
+                # except:
+                #     print("error")
         self.window.close()
     
 def run():
