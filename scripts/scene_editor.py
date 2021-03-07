@@ -2,22 +2,21 @@
 
 import PySimpleGUI as sg
 from PIL import Image
-import os.path
+import os
 import io
 
+SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets"
+
 class SceneEditorGUI:
+
+
     def __init__(self):
         layout = self.create_layout()
         self.window = sg.Window(title="Scene Editor", layout=layout)
 
     def create_layout(self):
         file_list_column = [
-            [sg.Text("Choose the path of the sprite sheet:")],
-            [
-                sg.Text("Path:"),
-                sg.In(size=(50, 1), enable_events=True, key="-FOLDER-"),
-                sg.FolderBrowse(),
-            ],
+            [sg.Button("Refresh", key="-REFRESH-")],
             [sg.Text("Select the sprite sheet:")],
             [sg.Listbox(values=[], enable_events=True, size=(65, 5), key="-FILE LIST-")],
             [sg.Button("Exit")],
@@ -41,7 +40,7 @@ class SceneEditorGUI:
         if resize:
             new_width, new_height = resize
             scale = min(new_height/cur_height, new_width/cur_width)
-            img = img.resize((int(cur_width*scale), int(cur_height*scale)), PIL.Image.ANTIALIAS)
+            img = img.resize((int(cur_width*scale), int(cur_height*scale)), Image.ANTIALIAS)
         bio = io.BytesIO()
         img.save(bio, format="PNG")
         del img
@@ -52,29 +51,27 @@ class SceneEditorGUI:
             event, values = self.window.read()
             if event == "Exit" or event == sg.WIN_CLOSED:
                 break
-            if event == "-FOLDER-":
-                folder = values["-FOLDER-"]
-                try:
-                    file_list = os.listdir(folder)  # Get list of files in folder
-                except:
-                    file_list = []
-
-                fnames = [
-                    f
-                    for f in file_list
-                    if os.path.isfile(os.path.join(folder, f))
-                    and f.lower().endswith((".png"))
-                ]
-                self.window["-FILE LIST-"].update(fnames)
+            if event == "-REFRESH-":
+                self.update_filelist(SPRITE_SHEET_PATH)
             elif event == "-FILE LIST-":  # A file was chosen from the listbox
-                # try:
-                filename = os.path.join(values["-FOLDER-"], values["-FILE LIST-"][0])
+                filename = os.path.join(SPRITE_SHEET_PATH, values["-FILE LIST-"][0])
                 for i in range(32):
                     for j in range(32):
                         self.window["-IMAGE_" + str(i) + "_" + str(j) + "_"].update(data=self.convert_to_bytes(filename))
-                # except:
-                #     print("error")
         self.window.close()
+
+    def update_filelist(self, folder):
+        try:
+            file_list = os.listdir(folder)  # Get list of files in folder
+        except:
+            file_list = []
+        fnames = [
+            f
+            for f in file_list
+            if os.path.isfile(os.path.join(folder, f))
+            and f.lower().endswith((".png"))
+        ]
+        self.window["-FILE LIST-"].update(fnames)
     
 def run():
     scene_editor_gui = SceneEditorGUI()
