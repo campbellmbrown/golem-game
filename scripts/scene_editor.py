@@ -6,24 +6,38 @@ import os
 import io
 
 SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets"
+TILE_SIZE = 16  # Pixels
+DISPLAY_TILES_X = 16
+DISPLAY_TILES_Y = 10
+TILES_X = 32
+TILES_Y = 20
+
+
+class Tile:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
 
 class SceneEditorGUI:
-
-
     def __init__(self):
+        # Setting up tile grid
+        self.tile_grid = [[Tile(i, j) for i in range(TILES_X)] for j in range(TILES_Y)]
+        # Setting up user interface
         layout = self.create_layout()
         self.window = sg.Window(title="Scene Editor", layout=layout)
 
     def create_layout(self):
+        # First column
         file_list_column = [
             [sg.Button("Refresh", key="-REFRESH-")],
             [sg.Text("Select the sprite sheet:")],
             [sg.Listbox(values=[], enable_events=True, size=(65, 5), key="-FILE LIST-")],
             [sg.Button("Exit")],
         ]
-        
-        image_viewer_column = [[sg.Image(key="-IMAGE_" + str(i) + "_" + str(j) + "_", pad=(0,0)) for j in range(32)] for i in range(32)]
-
+        # Second column
+        image_viewer_column = [[sg.Image(key="-IMAGE_" + str(i) + "_" + str(j) + "_", pad=(0,0)) for i in range(DISPLAY_TILES_X)] for j in range(DISPLAY_TILES_Y)]
+        # Bringing together columns
         layout = [
             [
                 sg.Column(file_list_column),
@@ -33,14 +47,10 @@ class SceneEditorGUI:
         ]
         return layout
 
-    def convert_to_bytes(self, file_path, resize=None):
+    def convert_to_bytes(self, tile, file_path):
         img = Image.open(file_path)
-        print(img.size)
-        cur_width, cur_height = img.size
-        if resize:
-            new_width, new_height = resize
-            scale = min(new_height/cur_height, new_width/cur_width)
-            img = img.resize((int(cur_width*scale), int(cur_height*scale)), Image.ANTIALIAS)
+        # cur_width, cur_height = img.size
+        img = img.crop(box=(tile.texture_rectangle[0], tile.texture_rectangle[1], tile.texture_rectangle[2], tile.texture_rectangle[3]))    
         bio = io.BytesIO()
         img.save(bio, format="PNG")
         del img
@@ -55,9 +65,9 @@ class SceneEditorGUI:
                 self.update_filelist(SPRITE_SHEET_PATH)
             elif event == "-FILE LIST-":  # A file was chosen from the listbox
                 filename = os.path.join(SPRITE_SHEET_PATH, values["-FILE LIST-"][0])
-                for i in range(32):
-                    for j in range(32):
-                        self.window["-IMAGE_" + str(i) + "_" + str(j) + "_"].update(data=self.convert_to_bytes(filename))
+                for j in range(DISPLAY_TILES_Y):
+                    for i in range(DISPLAY_TILES_X):
+                        self.window["-IMAGE_" + str(i) + "_" + str(j) + "_"].update(data=self.convert_to_bytes(self.tile_grid[j][i], filename))
         self.window.close()
 
     def update_filelist(self, folder):
