@@ -12,7 +12,7 @@ DISPLAY_TILES_X = 16
 DISPLAY_TILES_Y = 10
 TILES_X = 32
 TILES_Y = 20
-
+SCALE = 2
 
 class MapTile:
     def __init__(self, x, y):
@@ -25,13 +25,15 @@ class AvaliableTile:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.texture_rectangle = (x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, TILE_SIZE)
+        self.texture_rectangle = (x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, (y + 1) * TILE_SIZE)
         self.data = 0
 
 class Spritesheet:
     def __init__(self, path):
         self.path = path
         self.width, self.height = self.find_size(path)
+        print(self.width)
+        print(self.height)
 
     def find_size(self, path):
         img = Image.open(path)
@@ -44,7 +46,7 @@ class SceneEditorGUI:
         self.tile_grid = [[MapTile(i, j) for i in range(TILES_X)] for j in range(TILES_Y)]
 
         blank_path = os.path.join(RESOURCES_PATH, "blank_tile.png")
-        spritesheet_path = os.path.join(SPRITE_SHEET_PATH, "test_tilesheet.png")
+        spritesheet_path = os.path.join(SPRITE_SHEET_PATH, "stardew_tilesheet.png")
         self.spritesheet = Spritesheet(spritesheet_path)
         self.avaliable_tile_grid = [[AvaliableTile(i, j) for i in range(self.spritesheet.width)] for j in range(self.spritesheet.height)]
 
@@ -69,10 +71,9 @@ class SceneEditorGUI:
                 # Updating the image with the tile image
                 self.window[key].update(data=tile_data)
 
-        self.window["-CURRENT_TILE-"].update(data=self.avaliable_tile_grid[0][0].data)
-
-    def get_image_element(self, key, i_idx, j_idx):
-        return self.window[(self.get_key_from_grid(key, i_idx, j_idx))]
+        self.current_tile_data = self.avaliable_tile_grid[0][0].data
+        self.window["-CURRENT_TILE-"].update(data=self.current_tile_data)
+        
 
     def get_key_from_grid(self, key, i_idx, j_idx):
         return "-" + key + "_" + str(i_idx) + "_" + str(j_idx) + "_"
@@ -111,6 +112,8 @@ class SceneEditorGUI:
     def convert_image_to_bytes(self, tile, file_path):
         img = Image.open(file_path)
         img = img.crop(box=(tile.texture_rectangle[0], tile.texture_rectangle[1], tile.texture_rectangle[2], tile.texture_rectangle[3]))
+        cur_width, cur_height = img.size
+        img = img.resize((int(cur_width * SCALE), int(cur_height * SCALE)), Image.ANTIALIAS)
         bio = io.BytesIO()
         img.save(bio, format="PNG")
         del img
@@ -122,20 +125,16 @@ class SceneEditorGUI:
             event, values = self.window.read()
             if event == "Exit" or event == sg.WIN_CLOSED:
                 break
-            '''
-            if event == "-REFRESH-":
-                self.update_filelist(SPRITE_SHEET_PATH)
-            elif event == "-FILE LIST-":  # A file was chosen from the listbox
-                # filename = os.path.join(SPRITE_SHEET_PATH, values["-FILE LIST-"][0])
-                # for j in range(DISPLAY_TILES_Y):
-                #     for i in range(DISPLAY_TILES_X):
-                #         self.window["-IMAGE_" + str(i) + "_" + str(j) + "_"].update(data=self.convert_image_to_bytes(self.tile_grid[j][i], filename))
+            for j in range(self.spritesheet.height):
+                for i in range(self.spritesheet.width):
+                    if event == (self.get_key_from_grid("AVALIABLE", i, j)):
+                        self.current_tile_data = self.avaliable_tile_grid[j][i].data
+                        self.window["-CURRENT_TILE-"].update(data=self.current_tile_data)
             for j in range(DISPLAY_TILES_Y):
                 for i in range(DISPLAY_TILES_X):
-                    if event == ("-IMAGE_" + str(i) + "_" + str(j) + "_"):
-                        print("{}, {}".format(i, j))
-            '''
-            continue
+                    key = self.get_key_from_grid("MAP", i, j)
+                    if event == (key):
+                        self.window[key].update(data=self.current_tile_data)
         self.window.close()
 
     def update_filelist(self, folder):
