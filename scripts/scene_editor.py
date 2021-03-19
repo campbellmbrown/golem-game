@@ -1,7 +1,9 @@
 # scene_editor.py
 
-import PySimpleGUI as sg
 from PIL import Image
+
+import PySimpleGUI as sg
+import keyboard as kb
 import os
 import io
 
@@ -42,8 +44,12 @@ class Spritesheet:
 
 class SceneEditorGUI:
     def __init__(self):
+        sg.SetOptions(element_padding=(0,0))    
+
         # Setting up tile grid
         self.tile_grid = [[MapTile(i, j) for i in range(TILES_X)] for j in range(TILES_Y)]
+        self.offset_x = 0
+        self.offset_y = 0
 
         blank_path = os.path.join(RESOURCES_PATH, "blank_tile.png")
         spritesheet_path = os.path.join(SPRITE_SHEET_PATH, "stardew_tilesheet.png")
@@ -54,11 +60,14 @@ class SceneEditorGUI:
         layout = self.create_layout()
         self.window = sg.Window(title="Scene Editor", layout=layout, finalize=True)
         
-        # Defaulting map grid to blank tile
+        # Defaulting map grid to blank tiles
+        for j in range(TILES_Y):
+            for i in range(TILES_X):
+                self.tile_grid[j][i].data = self.convert_image_to_bytes(self.tile_grid[j][i], blank_path)
         for j in range(DISPLAY_TILES_Y):
             for i in range(DISPLAY_TILES_X):
                 key = self.get_key_from_grid("MAP", i, j)
-                self.window[key].update(data=self.convert_image_to_bytes(self.tile_grid[j][i], blank_path))
+                self.window[key].update(data=self.tile_grid[j][i].data)
 
         # Filling in the avaliable tile grid
         for j in range(self.spritesheet.height):
@@ -66,10 +75,9 @@ class SceneEditorGUI:
                 key = self.get_key_from_grid("AVALIABLE", i, j)
                 tile = self.avaliable_tile_grid[j][i]
                 # Reading the image and extracting bytes data
-                self.convert_image_to_bytes(tile, self.spritesheet.path)
-                tile_data = tile.data
+                tile.data = self.convert_image_to_bytes(tile, self.spritesheet.path)
                 # Updating the image with the tile image
-                self.window[key].update(data=tile_data)
+                self.window[key].update(data=tile.data)
 
         self.current_tile_data = self.avaliable_tile_grid[0][0].data
         self.window["-CURRENT_TILE-"].update(data=self.current_tile_data)
@@ -84,20 +92,20 @@ class SceneEditorGUI:
              [sg.Text("Avaliable tiles:")],
         ]
         for j in range(self.spritesheet.height):
-            avaliable_column.append([sg.Image(key=self.get_key_from_grid("AVALIABLE", i, j), pad=(0,0), enable_events=True) for i in range(self.spritesheet.width)])
+            avaliable_column.append([sg.Image(key=self.get_key_from_grid("AVALIABLE", i, j), enable_events=True) for i in range(self.spritesheet.width)])
 
         # Creating the map section
         map_column = [
             [sg.Text("Map:")],
         ]
         for j in range(DISPLAY_TILES_Y):
-            map_column.append([sg.Image(key=self.get_key_from_grid("MAP", i, j), pad=(0,0), enable_events=True) for i in range(DISPLAY_TILES_X)])
+            map_column.append([sg.Image(key=self.get_key_from_grid("MAP", i, j), enable_events=True) for i in range(DISPLAY_TILES_X)])
 
         # Creating the information section
         information_column = [
             [sg.Text("Selected tile:")],
             [sg.Image(key="-CURRENT_TILE-")],
-            [sg.Text("Avaliable tiles:")],
+            [sg.Button("Up"), sg.Button("Down"), sg.Button("Left"), sg.Button("Right")]
         ]        
         
         # Bringing together section
@@ -117,11 +125,10 @@ class SceneEditorGUI:
         bio = io.BytesIO()
         img.save(bio, format="PNG")
         del img
-        tile.data = bio.getvalue()
         return bio.getvalue()
 
     def loop(self):
-        while True:
+        while(True):
             event, values = self.window.read()
             if event == "Exit" or event == sg.WIN_CLOSED:
                 break
@@ -134,7 +141,36 @@ class SceneEditorGUI:
                 for i in range(DISPLAY_TILES_X):
                     key = self.get_key_from_grid("MAP", i, j)
                     if event == (key):
+                        self.tile_grid[j + self.offset_y][i + self.offset_x].data = self.current_tile_data
                         self.window[key].update(data=self.current_tile_data)
+            if event == "Down":
+                if (self.offset_y < TILES_Y - DISPLAY_TILES_Y):
+                    self.offset_y += 1
+                    for j in range(DISPLAY_TILES_Y):
+                        for i in range(DISPLAY_TILES_X):
+                            key = self.get_key_from_grid("MAP", i, j)
+                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
+            if event == "Up":
+                if (self.offset_y > 0):
+                    self.offset_y -= 1
+                    for j in range(DISPLAY_TILES_Y):
+                        for i in range(DISPLAY_TILES_X):
+                            key = self.get_key_from_grid("MAP", i, j)
+                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
+            if event == "Left":
+                if (self.offset_x > 0):
+                    self.offset_x -= 1
+                    for j in range(DISPLAY_TILES_Y):
+                        for i in range(DISPLAY_TILES_X):
+                            key = self.get_key_from_grid("MAP", i, j)
+                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
+            if event == "Right":
+                if (self.offset_x < TILES_X - DISPLAY_TILES_X):
+                    self.offset_x += 1
+                    for j in range(DISPLAY_TILES_Y):
+                        for i in range(DISPLAY_TILES_X):
+                            key = self.get_key_from_grid("MAP", i, j)
+                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
         self.window.close()
 
     def update_filelist(self, folder):
