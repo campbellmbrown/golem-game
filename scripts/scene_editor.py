@@ -7,13 +7,15 @@ import keyboard as kb
 import os
 import io
 
-SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets"
-RESOURCES_PATH = os.getcwd() + "/scene_editor_textures"
+SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets/stardew_tilesheet.png"
+BLANK_TILE_PATH = os.getcwd() + "/scene_editor_textures/blank_tile.png"
 TILE_SIZE = 16  # Pixels
 DISPLAY_TILES_X = 16
 DISPLAY_TILES_Y = 10
 TILES_X = 32
 TILES_Y = 20
+MAX_OFFSET_X = TILES_X - DISPLAY_TILES_X - 1
+MAX_OFFSET_Y = TILES_Y - DISPLAY_TILES_Y - 1
 SCALE = 2
 
 class MapTile:
@@ -51,9 +53,7 @@ class SceneEditorGUI:
         self.offset_x = 0
         self.offset_y = 0
 
-        blank_path = os.path.join(RESOURCES_PATH, "blank_tile.png")
-        spritesheet_path = os.path.join(SPRITE_SHEET_PATH, "stardew_tilesheet.png")
-        self.spritesheet = Spritesheet(spritesheet_path)
+        self.spritesheet = Spritesheet(SPRITE_SHEET_PATH)
         self.avaliable_tile_grid = [[AvaliableTile(i, j) for i in range(self.spritesheet.width)] for j in range(self.spritesheet.height)]
 
         # Setting up user interface
@@ -63,11 +63,8 @@ class SceneEditorGUI:
         # Defaulting map grid to blank tiles
         for j in range(TILES_Y):
             for i in range(TILES_X):
-                self.tile_grid[j][i].data = self.convert_image_to_bytes(self.tile_grid[j][i], blank_path)
-        for j in range(DISPLAY_TILES_Y):
-            for i in range(DISPLAY_TILES_X):
-                key = self.get_key_from_grid("MAP", i, j)
-                self.window[key].update(data=self.tile_grid[j][i].data)
+                self.tile_grid[j][i].data = self.convert_image_to_bytes(self.tile_grid[j][i], BLANK_TILE_PATH)
+        self.update_display_grid()
 
         # Filling in the avaliable tile grid
         for j in range(self.spritesheet.height):
@@ -84,20 +81,16 @@ class SceneEditorGUI:
         
 
     def get_key_from_grid(self, key, i_idx, j_idx):
-        return "-" + key + "_" + str(i_idx) + "_" + str(j_idx) + "_"
+        return "-" + key + "_" + str(i_idx) + "_" + str(j_idx) + "-"
 
     def create_layout(self):
         # Creating the avaliable tiles section
-        avaliable_column = [
-             [sg.Text("Avaliable tiles:")],
-        ]
+        avaliable_column = [[sg.Text("Avaliable tiles:")]]
         for j in range(self.spritesheet.height):
             avaliable_column.append([sg.Image(key=self.get_key_from_grid("AVALIABLE", i, j), enable_events=True) for i in range(self.spritesheet.width)])
 
         # Creating the map section
-        map_column = [
-            [sg.Text("Map:")],
-        ]
+        map_column = [[sg.Text("Map:")]]
         for j in range(DISPLAY_TILES_Y):
             map_column.append([sg.Image(key=self.get_key_from_grid("MAP", i, j), enable_events=True) for i in range(DISPLAY_TILES_X)])
 
@@ -129,9 +122,23 @@ class SceneEditorGUI:
 
     def loop(self):
         while(True):
+            # Checking events
             event, values = self.window.read()
+            # Exit condition
             if event == "Exit" or event == sg.WIN_CLOSED:
                 break
+            elif (event == "Down") and (self.offset_y <= MAX_OFFSET_Y):
+                self.offset_y += 1
+                self.update_display_grid()
+            elif (event == "Up") and (self.offset_y > 0):
+                self.offset_y -= 1
+                self.update_display_grid()
+            elif (event == "Right") and (self.offset_x <= MAX_OFFSET_X):
+                self.offset_x += 1
+                self.update_display_grid()
+            elif (event == "Left") and (self.offset_x > 0):
+                self.offset_x -= 1
+                self.update_display_grid()
             for j in range(self.spritesheet.height):
                 for i in range(self.spritesheet.width):
                     if event == (self.get_key_from_grid("AVALIABLE", i, j)):
@@ -143,35 +150,15 @@ class SceneEditorGUI:
                     if event == (key):
                         self.tile_grid[j + self.offset_y][i + self.offset_x].data = self.current_tile_data
                         self.window[key].update(data=self.current_tile_data)
-            if event == "Down":
-                if (self.offset_y < TILES_Y - DISPLAY_TILES_Y):
-                    self.offset_y += 1
-                    for j in range(DISPLAY_TILES_Y):
-                        for i in range(DISPLAY_TILES_X):
-                            key = self.get_key_from_grid("MAP", i, j)
-                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
-            if event == "Up":
-                if (self.offset_y > 0):
-                    self.offset_y -= 1
-                    for j in range(DISPLAY_TILES_Y):
-                        for i in range(DISPLAY_TILES_X):
-                            key = self.get_key_from_grid("MAP", i, j)
-                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
-            if event == "Left":
-                if (self.offset_x > 0):
-                    self.offset_x -= 1
-                    for j in range(DISPLAY_TILES_Y):
-                        for i in range(DISPLAY_TILES_X):
-                            key = self.get_key_from_grid("MAP", i, j)
-                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
-            if event == "Right":
-                if (self.offset_x < TILES_X - DISPLAY_TILES_X):
-                    self.offset_x += 1
-                    for j in range(DISPLAY_TILES_Y):
-                        for i in range(DISPLAY_TILES_X):
-                            key = self.get_key_from_grid("MAP", i, j)
-                            self.window[key].update(data=self.tile_grid[j + self.offset_y][i + self.offset_x].data)
+
         self.window.close()
+            
+    def update_display_grid(self):
+        for j in range(DISPLAY_TILES_Y):
+            for i in range(DISPLAY_TILES_X):
+                key = self.get_key_from_grid("MAP", i, j)
+                tile_data = self.tile_grid[j + self.offset_y][i + self.offset_x].data
+                self.window[key].update(data=tile_data)
 
     def update_filelist(self, folder):
         try:
