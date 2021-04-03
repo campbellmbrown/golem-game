@@ -1,4 +1,4 @@
-﻿using golemgame.Gui;
+﻿using golemgame.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,25 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace golemgame.Managers
+namespace golemgame.GameStates
 {
-    public class CursorManager
+    public class PlayingState
     {
-        private Cursor _cursor;
+        private PlayerManager _playerManager { get; set; }
 
-        public CursorManager()
+        public PlayingState()
         {
-            _cursor = new Cursor();
+            _playerManager = new PlayerManager();
         }
 
         public void Update(GameTime gameTime)
         {
-            _cursor.Update(gameTime);
+            _playerManager.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _cursor.Draw(spriteBatch);
+            _playerManager.Draw(spriteBatch);
         }
     }
 }

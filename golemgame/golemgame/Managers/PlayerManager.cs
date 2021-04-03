@@ -10,21 +10,13 @@ using System.Threading.Tasks;
 
 namespace golemgame.Managers
 {
-    interface IPlayerManager
-    {
-        void Update(GameTime gameTime);
-        void Draw(SpriteBatch spriteBatch);
-    }
-
-    public class PlayerManager : IPlayerManager
+    public class PlayerManager
     {
         protected Player player { get; }
         protected InputManager inputManager { get; }
-        private Game1 _game;
 
-        public PlayerManager(Game1 game)
+        public PlayerManager()
         {
-            _game = game;
             player = new Player();
             inputManager = new InputManager();
             inputManager.AddInputAndMethod(Keys.W, MovePlayerUp);
@@ -42,9 +34,6 @@ namespace golemgame.Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             player.Draw(spriteBatch);
-            ICursorManager cursorManager = (ICursorManager)Game.Services.GetService(typeof(ICursorManager));
-            cursorManager.Draw(spriteBatch);
-
         }
 
         public void MovePlayerUp() { player.MoveUp(); }
