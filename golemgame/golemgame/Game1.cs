@@ -33,8 +33,7 @@ namespace golemgame
         }
         public static Random random;
 
-        private PlayerManager _playerManager { get; set; } // TODO - move to game manager?
-        private CursorManager _cursorManager { get; set; } // TODO - move to game manager?
+        private GameManager _gameManager;
 
         public Game1()
         {
@@ -69,10 +68,8 @@ namespace golemgame
                 { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
             };
 
-            _playerManager = new PlayerManager();
-            _cursorManager = new CursorManager();
+            _gameManager = new GameManager();
         }
-
 
         protected override void UnloadContent()
         {
@@ -81,16 +78,14 @@ namespace golemgame
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-            _playerManager.Update(gameTime);
-            _cursorManager.Update(gameTime);
+            _gameManager.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
-            _playerManager.Draw(_spriteBatch);
-            _cursorManager.Draw(_spriteBatch);
+            _gameManager.Draw(_spriteBatch);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
