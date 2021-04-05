@@ -20,7 +20,7 @@ namespace golemgame.Managers
         // Common to all states
         private CursorManager _cursorManager { get; set; }
 
-        private PlayingState playingState;
+        private PlayingState _playingState;
 
         public GameManager()
         {
@@ -28,7 +28,7 @@ namespace golemgame.Managers
 
             _cursorManager = new CursorManager();
 
-            playingState = new PlayingState();
+            _playingState = new PlayingState();
         }
 
         public void Update(GameTime gameTime)
@@ -37,7 +37,7 @@ namespace golemgame.Managers
             switch (_gameState)
             {
                 case GameState.Playing:
-                    playingState.Update(gameTime);
+                    _playingState.Update(gameTime);
                     break;
                 default:
                     break;
@@ -49,7 +49,7 @@ namespace golemgame.Managers
             switch (_gameState)
             {
                 case (GameState.Playing):
-                    playingState.Draw(spriteBatch);
+                    _playingState.Draw(spriteBatch);
                     break;
                 default:
                     break;
