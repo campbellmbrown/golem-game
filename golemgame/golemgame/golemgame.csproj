@@ -52,6 +52,7 @@
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Managers\TileData.cs" />
     <Compile Include="Managers\TileManager.cs" />
     <Compile Include="Models\Animation.cs" />
     <Compile Include="Models\Sprite.cs" />
