@@ -1,6 +1,8 @@
-﻿using golemgame.Models.Tiles;
+﻿using golemgame.Models.Scenes;
+using golemgame.Models.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +20,8 @@ namespace golemgame.Managers
             _tiles = new List<Tile>();
 
             // TODO: Add level interpreter here
-            _tiles.Add(new Tile(new Vector2(0, 0), Tile.textureRectangles[0], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(1, 0), Tile.textureRectangles[1], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(2, 0), Tile.textureRectangles[2], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(3, 0), Tile.textureRectangles[3], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(0, 1), Tile.textureRectangles[4], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(1, 1), Tile.textureRectangles[5], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(2, 1), Tile.textureRectangles[6], Game1.textures["test_tilesheet"]));
-            _tiles.Add(new Tile(new Vector2(3, 1), Tile.textureRectangles[7], Game1.textures["test_tilesheet"]));
+            string strJSON = System.IO.File.ReadAllText(@"D:\Git Projects\golem-game\golemgame\golemgame\Scenes\scene.json");
+            Scene location = JsonConvert.DeserializeObject<Scene>(strJSON);
         }
 
         public void Update(GameTime gameTime)
