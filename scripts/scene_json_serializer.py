@@ -14,6 +14,7 @@ class JsonSceneManager:
         json_str = self.json_scene.toJSON()
         destination = open("scene.json", "w+")
         destination.write(json_str)
+        destination.close()
 
 class JsonScene:
     def toJSON(self):
