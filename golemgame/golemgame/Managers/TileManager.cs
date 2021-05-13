@@ -19,7 +19,6 @@ namespace golemgame.Managers
         {
             _tiles = new List<Tile>();
 
-            // TODO: Add level interpreter here
             string strJSON = System.IO.File.ReadAllText(@"D:\Git Projects\golem-game\golemgame\golemgame\Scenes\scene.json");
             Scene location = JsonConvert.DeserializeObject<Scene>(strJSON);
         }
