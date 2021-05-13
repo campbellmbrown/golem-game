@@ -1,6 +1,8 @@
 # scene_editor.py
 
 from PIL import Image
+from scene_json_serializer import JsonSceneManager
+from tile import MapTile, Spritesheet, AvaliableTile
 
 import PySimpleGUI as sg
 import keyboard as kb
@@ -9,7 +11,6 @@ import io
 
 SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets/stardew_tilesheet.png"
 BLANK_TILE_PATH = os.getcwd() + "/scene_editor_textures/blank_tile.png"
-TILE_SIZE = 16  # Pixels
 DISPLAY_TILES_X = 16
 DISPLAY_TILES_Y = 10
 TILES_X = 32
@@ -17,32 +18,6 @@ TILES_Y = 20
 MAX_OFFSET_X = TILES_X - DISPLAY_TILES_X - 1
 MAX_OFFSET_Y = TILES_Y - DISPLAY_TILES_Y - 1
 SCALE = 2
-
-class MapTile:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
-        self.data = 0
-
-class AvaliableTile:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.texture_rectangle = (x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, (y + 1) * TILE_SIZE)
-        self.data = 0
-
-class Spritesheet:
-    def __init__(self, path):
-        self.path = path
-        self.width, self.height = self.find_size(path)
-        print(self.width)
-        print(self.height)
-
-    def find_size(self, path):
-        img = Image.open(path)
-        width, height = img.size
-        return [int(width / TILE_SIZE), int(height / TILE_SIZE)]
 
 class SceneEditorGUI:
     def __init__(self):
@@ -77,11 +52,23 @@ class SceneEditorGUI:
                 self.window[key].update(data=tile.data)
 
         self.current_tile_data = self.avaliable_tile_grid[0][0].data
+        self.current_tile_texture_rectangle = self.avaliable_tile_grid[0][0].texture_rectangle
         self.window["-CURRENT_TILE-"].update(data=self.current_tile_data)
         
 
     def get_key_from_grid(self, key, i_idx, j_idx):
-        return "-" + key + "_" + str(i_idx) + "_" + str(j_idx) + "-"
+        '''
+        Generates a key for a PySimpleGUI element from a grid.
+            
+            Parameters:
+                key   (str): The main key of the element
+                i_idx (int): The i index of the element (x-axis)
+                j_idx (int): The j index of the element (y-axis)
+            Returns:
+                grid_key (str): PySimpleGUI grid element key
+        '''
+        grid_key = "-" + key + "_" + str(i_idx) + "_" + str(j_idx) + "-"
+        return grid_key
 
     def create_layout(self):
         # Creating the avaliable tiles section
@@ -98,7 +85,8 @@ class SceneEditorGUI:
         information_column = [
             [sg.Text("Selected tile:")],
             [sg.Image(key="-CURRENT_TILE-")],
-            [sg.Button("Up"), sg.Button("Down"), sg.Button("Left"), sg.Button("Right")]
+            [sg.Button("Up"), sg.Button("Down"), sg.Button("Left"), sg.Button("Right")],
+            [sg.Button("Save"), sg.Button("Load")]
         ]        
         
         # Bringing together section
@@ -123,7 +111,7 @@ class SceneEditorGUI:
     def loop(self):
         while(True):
             # Checking events
-            event, values = self.window.read()
+            event, _ = self.window.read()
             # Exit condition
             if event == "Exit" or event == sg.WIN_CLOSED:
                 break
@@ -139,16 +127,20 @@ class SceneEditorGUI:
             elif (event == "Left") and (self.offset_x > 0):
                 self.offset_x -= 1
                 self.update_display_grid()
+            elif (event == "Save"):
+                self.serialize_scene()
             for j in range(self.spritesheet.height):
                 for i in range(self.spritesheet.width):
                     if event == (self.get_key_from_grid("AVALIABLE", i, j)):
                         self.current_tile_data = self.avaliable_tile_grid[j][i].data
+                        self.current_tile_texture_rectangle = self.avaliable_tile_grid[j][i].texture_rectangle
                         self.window["-CURRENT_TILE-"].update(data=self.current_tile_data)
             for j in range(DISPLAY_TILES_Y):
                 for i in range(DISPLAY_TILES_X):
                     key = self.get_key_from_grid("MAP", i, j)
                     if event == (key):
                         self.tile_grid[j + self.offset_y][i + self.offset_x].data = self.current_tile_data
+                        self.tile_grid[j + self.offset_y][i + self.offset_x].texture_rectangle = self.current_tile_texture_rectangle
                         self.window[key].update(data=self.current_tile_data)
 
         self.window.close()
@@ -173,6 +165,10 @@ class SceneEditorGUI:
         ]
         self.window["-FILE LIST-"].update(fnames)
     
+    def serialize_scene(self):
+        json_scene = JsonSceneManager(self.tile_grid)
+        json_scene.serialize()
+
 def run():
     scene_editor_gui = SceneEditorGUI()
     scene_editor_gui.loop()
