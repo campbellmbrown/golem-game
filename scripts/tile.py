@@ -9,6 +9,9 @@ class MapTile:
         self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
         self.data = 0
 
+    def reset_texture_rectangle(self):
+        self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
+
 class AvaliableTile:
     def __init__(self, x, y):
         self.x = x

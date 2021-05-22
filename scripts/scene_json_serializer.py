@@ -16,6 +16,11 @@ class JsonSceneManager:
         destination.write(json_str)
         destination.close()
 
+    @staticmethod
+    def deserialize(self):
+        # todo
+        return -1
+
 class JsonScene:
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, 
