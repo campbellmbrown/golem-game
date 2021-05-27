@@ -1,7 +1,7 @@
 # scene_editor.py
 
 from PIL import Image
-from scene_json_serializer import JsonSceneManager
+from json_handler import JsonSceneManager
 from tile import MapTile, Spritesheet, AvaliableTile
 from colorlog import ColoredFormatter
 
@@ -12,7 +12,6 @@ import io
 import logging
 
 SPRITE_SHEET_PATH = os.getcwd() + "/tilesheets/tilesheet.png"
-BLANK_TILE_PATH = os.getcwd() + "/scene_editor_textures/blank_tile.png"
 DISPLAY_TILES_X = 16
 DISPLAY_TILES_Y = 10
 TILES_X = 18
@@ -213,7 +212,7 @@ class SceneEditorGUI:
         for j in range(TILES_Y):
             for i in range(TILES_X):
                 self.tile_grid[j][i].reset_texture_rectangle()
-                self.tile_grid[j][i].data = self.convert_image_to_bytes(self.tile_grid[j][i], BLANK_TILE_PATH)
+                self.tile_grid[j][i].data = self.convert_image_to_bytes(self.tile_grid[j][i], SPRITE_SHEET_PATH)
         self.update_display_grid()
             
     def update_display_grid(self):
@@ -235,18 +234,18 @@ class SceneEditorGUI:
         self.window["-FILE LIST-"].update(fnames)
     
     def serialize_scene(self):
-        json_scene = JsonSceneManager(self.tile_grid)
-        json_scene.serialize()
+        json_scene = JsonSceneManager.serialize(self.tile_grid)
 
     def deserialize_scene(self, file_path):
-
-        logger.info("Loading data from file at: %s", file_path)
-        f = open(file_path, "r")
-        data = f.read()
-
-
-        # todo move
-        self.clear_map_grid()
+        self.tile_grid = JsonSceneManager.deserialize(file_path)
+        for j in range(TILES_Y):
+            for i in range(TILES_X):
+                key = self.get_key_from_grid("MAP", i, j)
+                tile = self.tile_grid[j][i]
+                # Reading the image and extracting bytes data
+                tile.data = self.convert_image_to_bytes(tile, self.spritesheet.path)
+                # Updating the image with the tile image
+        self.update_display_grid()
     
 
 def run():

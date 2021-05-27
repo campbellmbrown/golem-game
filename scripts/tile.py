@@ -3,11 +3,14 @@ from PIL import Image
 TILE_SIZE = 16  # Pixels
 
 class MapTile:
-    def __init__(self, x, y):
+    def __init__(self, x, y, texture_rectangle=(0, 0, TILE_SIZE, TILE_SIZE)):
         self.x = x
         self.y = y
-        self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
+        self.texture_rectangle = texture_rectangle
         self.data = 0
+
+    def __repr__ (self):
+        return "MapTile(x=" + str(self.x) + ", y=" + str(self.y) + ", texture_rectangle=" + str(self.texture_rectangle) + ")"
 
     def reset_texture_rectangle(self):
         self.texture_rectangle = (0, 0, TILE_SIZE, TILE_SIZE)
