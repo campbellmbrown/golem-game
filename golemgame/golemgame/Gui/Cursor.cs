@@ -1,4 +1,4 @@
-﻿using golemgame.Models;
+using golemgame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -22,7 +22,7 @@ namespace golemgame.Gui
 
         public void Update(GameTime gameTime)
         {
-            _position = Game1.mousePosition;
+            //_position = viewManager.mousePosition;
         }
 
         public void Draw(SpriteBatch spriteBatch)
