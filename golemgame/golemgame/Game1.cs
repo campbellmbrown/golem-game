@@ -62,6 +62,7 @@ namespace golemgame
             textures = new Dictionary<string, Texture2D>()
             {
                 { "cursor", Content.Load<Texture2D>("gui/cursor") },
+                { "tilesheet", Content.Load<Texture2D>("textures/tilesheets/tilesheet") },
             };
             animations = new Dictionary<string, Animation>()
             {
