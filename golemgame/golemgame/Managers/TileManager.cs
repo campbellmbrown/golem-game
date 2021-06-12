@@ -18,10 +18,10 @@ namespace golemgame.Managers
         public TileManager()
         {
             _tiles = new List<Tile>();
+            // TODO: relative paths
             string strJSON = System.IO.File.ReadAllText(@"D:\Git Projects\golem-game\golemgame\golemgame\Scenes\scene.json");
             Scene scene = JsonConvert.DeserializeObject<Scene>(strJSON);
-            Console.WriteLine("Generating scene...");
-            
+
             _tiles = scene.Generate();
         }
 

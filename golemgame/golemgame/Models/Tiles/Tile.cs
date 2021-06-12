@@ -11,17 +11,6 @@ namespace golemgame.Models.Tiles
     public class Tile
     {
         public const int TILE_SIZE = 16;
-        public static Dictionary<int, Rectangle> textureRectangles = new Dictionary<int, Rectangle>()
-        {
-            { 0, new Rectangle(0, 0, TILE_SIZE, TILE_SIZE) },
-            { 1, new Rectangle(TILE_SIZE, 0, TILE_SIZE, TILE_SIZE) },
-            { 2, new Rectangle(2 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE) },
-            { 3, new Rectangle(3 * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE) },
-            { 4, new Rectangle(0, TILE_SIZE, TILE_SIZE, TILE_SIZE) },
-            { 5, new Rectangle(TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE) },
-            { 6, new Rectangle(2 * TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE) },
-            { 7, new Rectangle(3 * TILE_SIZE, TILE_SIZE, TILE_SIZE, TILE_SIZE) },
-        };
 
         private Vector2 _position;
         private Rectangle _textureRectangle;
