@@ -15,11 +15,12 @@ namespace golemgame.GameStates
         private PlayerManager _playerManager { get; set; }
         private CursorManager _cursorManager { get; set; }
 
-        public PlayingState()
+        public PlayingState(ViewManager viewManager)
         {
             _tileManager = new TileManager();
             _playerManager = new PlayerManager();
-            _cursorManager = new CursorManager();
+            // Cursor manager can update the view manager
+            _cursorManager = new CursorManager(viewManager);
         }
 
         public void Update(GameTime gameTime)

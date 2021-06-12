@@ -13,9 +13,9 @@ namespace golemgame.Managers
     {
         private Cursor _cursor;
 
-        public CursorManager()
+        public CursorManager(ViewManager viewManager)
         {
-            _cursor = new Cursor();
+            _cursor = new Cursor(viewManager);
         }
 
         public void Update(GameTime gameTime)

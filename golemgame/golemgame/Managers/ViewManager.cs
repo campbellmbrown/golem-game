@@ -10,13 +10,7 @@ using System.Threading.Tasks;
 
 namespace golemgame.Managers
 {
-    interface IViewManagerService
-    {
-        Camera2D camera { get; }
-        Vector2 mousePosition { get; }
-    }
-
-    public class ViewManager : GameComponent, IViewManagerService
+    public class ViewManager
     {
         public Camera2D camera { get; set; }
         public Vector2 zoomedScreenSize { get { return screenSize / camera.Zoom; } }
@@ -45,10 +39,8 @@ namespace golemgame.Managers
         }
         private GraphicsDevice _graphicsDevice;
 
-        public ViewManager(Game game, GraphicsDevice graphicsDevice, GraphicsDeviceManager graphicsDeviceManager) : base(game)
+        public ViewManager(Game game, GraphicsDevice graphicsDevice, GraphicsDeviceManager graphicsDeviceManager)
         {
-            game.Services.AddService(typeof(IViewManagerService), this);
-
             _graphicsDevice = graphicsDevice;
             camera = new Camera2D(_graphicsDevice)
             {

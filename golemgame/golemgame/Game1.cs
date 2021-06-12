@@ -60,8 +60,8 @@ namespace golemgame
                 { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
             };
 
-            _playingState = new PlayingState();
             _viewManager = new ViewManager(this, GraphicsDevice, _graphics);
+            _playingState = new PlayingState(_viewManager);
         }
 
         protected override void UnloadContent()
