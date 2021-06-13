@@ -1,4 +1,4 @@
-﻿using golemgame.Entities;
+using golemgame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,9 +14,11 @@ namespace golemgame.Managers
     {
         protected Player player { get; }
         protected InputManager inputManager { get; }
+        private ViewManager _viewManager;
 
-        public PlayerManager()
+        public PlayerManager(ViewManager viewManager)
         {
+            _viewManager = viewManager;
             player = new Player();
             inputManager = new InputManager();
             inputManager.AddInputAndMethod(Keys.W, MovePlayerUp);
@@ -29,6 +31,8 @@ namespace golemgame.Managers
         {
             inputManager.Update(gameTime);
             player.Update(gameTime);
+            _viewManager.UpdateCameraPosition(player.center);
+
         }
 
         public void Draw(SpriteBatch spriteBatch)

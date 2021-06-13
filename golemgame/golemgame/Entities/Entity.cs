@@ -13,6 +13,13 @@ namespace golemgame.Entities
     {
         protected Sprite sprite { get; }
         protected Vector2 position { get; set; }
+        public Vector2 center
+        {
+            get
+            {
+                return position + sprite.relativeCenter;
+            }
+        }
 
         public Entity(Sprite sprite, Vector2 position)
         {

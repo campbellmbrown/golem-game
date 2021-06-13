@@ -14,23 +14,21 @@ namespace golemgame.Gui
     {
         private Sprite _sprite { get; set; }
         private Vector2 _position { get; set; }
-        private ViewManager _viewManager { get; set; }
 
-        public Cursor(ViewManager viewManager)
+        public Cursor()
         {
-            _viewManager = viewManager;
             _position = Vector2.Zero;
             _sprite = new Sprite(Game1.textures["cursor"]);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(Vector2 mousePosition)
         {
-            _position = _viewManager.mousePosition;
+            _position = mousePosition;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, float scale)
         {
-            _sprite.Draw(spriteBatch, _position);
+            _sprite.Draw(spriteBatch, _position, scale);
         }
     }
 }

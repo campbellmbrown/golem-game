@@ -18,8 +18,9 @@ namespace golemgame.GameStates
         public PlayingState(ViewManager viewManager)
         {
             _tileManager = new TileManager();
-            _playerManager = new PlayerManager();
-            // Cursor manager can update the view manager
+            // Player manager controls the camera position
+            _playerManager = new PlayerManager(viewManager);
+            // Cursor manager needs the mouse position
             _cursorManager = new CursorManager(viewManager);
         }
 
@@ -27,7 +28,7 @@ namespace golemgame.GameStates
         {
             _tileManager.Update(gameTime);
             _playerManager.Update(gameTime);
-            _cursorManager.Update(gameTime);
+            _cursorManager.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
