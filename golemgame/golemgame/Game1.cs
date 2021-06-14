@@ -17,9 +17,9 @@ namespace golemgame
 
     public class Game1 : Game
     {
-        GraphicsDeviceManager _graphics { get; set; }
-        private SpriteBatch _spriteBatch { get; set; }
-        private Color _backgroundColor { get; set; }
+        GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private Color _backgroundColor;
 
         public static Dictionary<string, Texture2D> textures { get; set; }
         public static Dictionary<string, Animation> animations { get; set; }
@@ -48,7 +48,6 @@ namespace golemgame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            Services.AddService(typeof(SpriteBatch), _spriteBatch);
 
             textures = new Dictionary<string, Texture2D>()
             {
@@ -70,6 +69,7 @@ namespace golemgame
 
         protected override void Update(GameTime gameTime)
         {
+            // TODO: move to input manager in the playing state
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             switch (_gameState)

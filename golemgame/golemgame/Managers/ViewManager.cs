@@ -15,7 +15,7 @@ namespace golemgame.Managers
     {
         public OrthographicCamera camera { get; set; }
         
-        public Vector2 topLeft { get { return camera.ScreenToWorld(Vector2.Zero); /*return Vector2.Transform(Vector2.Zero, camera.GetInverseViewMatrix());*/ } }
+        public Vector2 topLeft { get { return camera.ScreenToWorld(Vector2.Zero); } }
         
         public Vector2 mousePosition
         {

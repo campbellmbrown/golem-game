@@ -11,9 +11,9 @@ namespace golemgame.GameStates
 {
     public class PlayingState
     {
-        private TileManager _tileManager { get; set; }
-        private PlayerManager _playerManager { get; set; }
-        private CursorManager _cursorManager { get; set; }
+        private TileManager _tileManager;
+        private PlayerManager _playerManager;
+        private CursorManager _cursorManager;
 
         public PlayingState(ViewManager viewManager)
         {

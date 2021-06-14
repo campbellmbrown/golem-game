@@ -12,8 +12,8 @@ namespace golemgame.Gui
 {
     public class Cursor
     {
-        private Sprite _sprite { get; set; }
-        private Vector2 _position { get; set; }
+        private Sprite _sprite;
+        private Vector2 _position;
 
         public Cursor()
         {

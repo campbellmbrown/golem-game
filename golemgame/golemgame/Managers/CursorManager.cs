@@ -11,8 +11,8 @@ namespace golemgame.Managers
 {
     public class CursorManager
     {
-        private Cursor _cursor { get; set; }
-        private ViewManager _viewManager { get; set; }
+        private Cursor _cursor;
+        private ViewManager _viewManager;
 
         public CursorManager(ViewManager viewManager)
         {
