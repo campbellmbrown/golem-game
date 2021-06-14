@@ -16,6 +16,13 @@ namespace golemgame.Managers
         private int _frameCount;
         private float _frameSpeed;
         private int _currentFrame;
+        public Vector2 currentFrameSize
+        {
+            get
+            {
+                return new Vector2(_animation.frameWidth, _animation.frameHeight);
+            }
+        }
 
         public AnimationManager(Animation animation)
         {

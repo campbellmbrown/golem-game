@@ -12,20 +12,22 @@ namespace golemgame.Managers
     public class CursorManager
     {
         private Cursor _cursor;
+        private ViewManager _viewManager;
 
-        public CursorManager()
+        public CursorManager(ViewManager viewManager)
         {
+            _viewManager = viewManager;
             _cursor = new Cursor();
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            _cursor.Update(gameTime);
+            _cursor.Update(_viewManager.mousePosition);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _cursor.Draw(spriteBatch);
+            _cursor.Draw(spriteBatch, 1/_viewManager.camera.Zoom);
         }
     }
 }

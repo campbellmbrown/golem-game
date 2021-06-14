@@ -11,25 +11,31 @@ namespace golemgame.GameStates
 {
     public class PlayingState
     {
-        private TileManager _tileManager { get; set; }
-        private PlayerManager _playerManager { get; set; }
+        private TileManager _tileManager;
+        private PlayerManager _playerManager;
+        private CursorManager _cursorManager;
 
-        public PlayingState()
+        public PlayingState(ViewManager viewManager)
         {
             _tileManager = new TileManager();
-            _playerManager = new PlayerManager();
+            // Player manager controls the camera position
+            _playerManager = new PlayerManager(viewManager);
+            // Cursor manager needs the mouse position
+            _cursorManager = new CursorManager(viewManager);
         }
 
         public void Update(GameTime gameTime)
         {
             _tileManager.Update(gameTime);
             _playerManager.Update(gameTime);
+            _cursorManager.Update();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             _tileManager.Draw(spriteBatch);
             _playerManager.Draw(spriteBatch);
+            _cursorManager.Draw(spriteBatch);
         }
     }
 }

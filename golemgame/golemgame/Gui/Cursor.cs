@@ -1,4 +1,5 @@
-﻿using golemgame.Models;
+using golemgame.Managers;
+using golemgame.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -20,14 +21,14 @@ namespace golemgame.Gui
             _sprite = new Sprite(Game1.textures["cursor"]);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(Vector2 mousePosition)
         {
-            _position = Game1.mousePosition;
+            _position = mousePosition;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, float scale)
         {
-            _sprite.Draw(spriteBatch, _position);
+            _sprite.Draw(spriteBatch, _position, scale);
         }
     }
 }
