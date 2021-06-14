@@ -26,7 +26,7 @@ namespace golemgame.Models.Scenes
             foreach (var tile in tiles)
             {
                 return_tiles.Add(new Tile(
-                    new Vector2(tile.position[0], tile.position[1]), 
+                    new Vector2(tile.position[0], tile.position[1]),
                     new Rectangle(tile.texture_rectangle[0], tile.texture_rectangle[1], tile.texture_rectangle[2], tile.texture_rectangle[3]),
                     Game1.textures["tilesheet"]
                     ));

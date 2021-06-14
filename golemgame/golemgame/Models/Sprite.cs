@@ -22,9 +22,9 @@ namespace golemgame.Models
         private Animation _animation; // TODO: Review if this needs to be here
         private AnimationManager _animationManager;
         private Visual _visualType;
-        private Vector2 size 
+        private Vector2 size
         {
-            get 
+            get
             {
                 switch (_visualType)
                 {
@@ -33,11 +33,11 @@ namespace golemgame.Models
                     case (Visual.Animation):
                         return _animationManager.currentFrameSize;
                     default:
-                        return Vector2.Zero; 
+                        return Vector2.Zero;
                 }
             }
         }
-    public Vector2 relativeCenter { get { return size / 2f; } }
+        public Vector2 relativeCenter { get { return size / 2f; } }
 
         public Sprite(Texture2D texture)
         {
@@ -60,7 +60,7 @@ namespace golemgame.Models
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, float scale=1)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, float scale = 1)
         {
             switch (_visualType)
             {

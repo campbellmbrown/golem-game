@@ -27,7 +27,7 @@ namespace golemgame.Managers
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _cursor.Draw(spriteBatch, 1/_viewManager.camera.Zoom);
+            _cursor.Draw(spriteBatch, 1 / _viewManager.camera.Zoom);
         }
     }
 }
