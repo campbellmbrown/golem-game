@@ -3,13 +3,14 @@
 
 /outputDir:bin/$(Platform)
 /intermediateDir:obj/$(Platform)
-/platform:Windows
+/platform:DesktopGL
 /config:
 /profile:Reach
 /compress:False
 
 #-------------------------------- References --------------------------------#
 
+/reference:C:\Users\campb\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -24,6 +25,23 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:animations/player/player_idle_left.png
+
+#begin fonts/normal_font.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/normal_font.fnt
+
+#begin fonts/normal_font_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/normal_font_0.png
 
 #begin gui/cursor.png
 /importer:TextureImporter
@@ -48,3 +66,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:textures/tilesheets/tilesheet.png
+

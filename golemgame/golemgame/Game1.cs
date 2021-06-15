@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +24,7 @@ namespace golemgame
 
         public static Dictionary<string, Texture2D> textures { get; set; }
         public static Dictionary<string, Animation> animations { get; set; }
+        public static Dictionary<string, BitmapFont> fonts { get; set; }
         public static Random random;
 
         private ViewManager _viewManager;
@@ -58,6 +60,10 @@ namespace golemgame
             {
                 { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
             };
+            fonts = new Dictionary<string, BitmapFont>()
+            {
+                { "normal_font", Content.Load<BitmapFont>("fonts/normal_font") },
+            };
 
             _viewManager = new ViewManager(GraphicsDevice, _graphics, Window);
             _playingState = new PlayingState(_viewManager);
@@ -86,7 +92,7 @@ namespace golemgame
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: _viewManager.camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: _viewManager.camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
 
             switch (_gameState)
             {

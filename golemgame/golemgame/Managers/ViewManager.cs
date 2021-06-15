@@ -49,7 +49,8 @@ namespace golemgame.Managers
             BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice, (int)screenSize.X, (int)screenSize.Y);
             camera = new OrthographicCamera(viewportAdapter);
             camera.ZoomIn(2);
-            graphicsDeviceManager.IsFullScreen = false;
+
+            graphicsDeviceManager.IsFullScreen = true;
             graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
             graphicsDeviceManager.ApplyChanges();
         }
