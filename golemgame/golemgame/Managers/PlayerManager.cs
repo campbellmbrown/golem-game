@@ -2,7 +2,6 @@ using golemgame.Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +38,6 @@ namespace golemgame.Managers
         public void Draw(SpriteBatch spriteBatch)
         {
             player.Draw(spriteBatch);
-            spriteBatch.DrawPoint(_viewManager.mousePosition, Color.Blue, 5);
         }
 
         public void MovePlayerUp() { player.MoveUp(); }
