@@ -58,7 +58,7 @@ namespace golemgame
             };
             animations = new Dictionary<string, Animation>()
             {
-                { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f ) },
+                { "player_idle_left", new Animation(Content.Load<Texture2D>("animations/player/player_idle_left"), 4, 0.2f) },
             };
             fonts = new Dictionary<string, BitmapFont>()
             {

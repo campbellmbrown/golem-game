@@ -14,6 +14,7 @@ namespace golemgame.GameStates
         private TileManager _tileManager;
         private PlayerManager _playerManager;
         private CursorManager _cursorManager;
+        private DebugManager _debugManager;
 
         public PlayingState(ViewManager viewManager)
         {
@@ -22,6 +23,8 @@ namespace golemgame.GameStates
             _playerManager = new PlayerManager(viewManager);
             // Cursor manager needs the mouse position
             _cursorManager = new CursorManager(viewManager);
+            // Debug manager needs the bottomLeft position
+            _debugManager = new DebugManager(viewManager);
         }
 
         public void Update(GameTime gameTime)
@@ -29,6 +32,7 @@ namespace golemgame.GameStates
             _tileManager.Update(gameTime);
             _playerManager.Update(gameTime);
             _cursorManager.Update();
+            _debugManager.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -36,6 +40,7 @@ namespace golemgame.GameStates
             _tileManager.Draw(spriteBatch);
             _playerManager.Draw(spriteBatch);
             _cursorManager.Draw(spriteBatch);
+            _debugManager.Draw(spriteBatch);
         }
     }
 }
