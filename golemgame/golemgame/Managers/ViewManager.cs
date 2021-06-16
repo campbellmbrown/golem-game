@@ -18,6 +18,7 @@ namespace golemgame.Managers
         public Vector2 topLeft { get { return camera.ScreenToWorld(Vector2.Zero); } }
         public Vector2 bottomLeft { get { return camera.ScreenToWorld(0, screenSize.Y); } }
         public static int scaleFactor = 2;
+        public float desiredCameraZoom = 2;
 
         public Vector2 mousePosition
         {
@@ -34,7 +35,6 @@ namespace golemgame.Managers
                 return new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             }
         }
-        private static Vector2 renderTargetSize { get { return screenSize / scaleFactor; } }
         private GraphicsDevice _graphicsDevice;
         public Vector2 windowSize
         {
@@ -43,7 +43,6 @@ namespace golemgame.Managers
                 return new Vector2(_graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
             }
         }
-        public RenderTarget2D renderTarget { get; set; }
 
         public ViewManager(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphicsDeviceManager, GameWindow gameWindow)
         {
@@ -52,20 +51,17 @@ namespace golemgame.Managers
             graphicsDeviceManager.PreferredBackBufferWidth = (int)screenSize.X;
             graphicsDeviceManager.PreferredBackBufferHeight = (int)screenSize.Y;
             graphicsDeviceManager.IsFullScreen = true;
+
             // Some other graphics device settings
             graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
             graphicsDeviceManager.ApplyChanges();
 
-            // Creating renderTarget
-            // This renderTarget is 1/2 the screen size, so we can scale when we draw to maintain pixel quality.
-            renderTarget = new RenderTarget2D(_graphicsDevice, (int)renderTargetSize.X, (int)renderTargetSize.Y);
-
             // Creating camera
             BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice,
-                _graphicsDevice.PresentationParameters.BackBufferWidth,
-                _graphicsDevice.PresentationParameters.BackBufferHeight);
+                _graphicsDevice.PresentationParameters.BackBufferWidth / scaleFactor,
+                _graphicsDevice.PresentationParameters.BackBufferHeight / scaleFactor);
             camera = new OrthographicCamera(viewportAdapter);
-            camera.ZoomIn(2);
+            camera.ZoomIn(desiredCameraZoom / scaleFactor);
         }
 
         public void UpdateCameraPosition(Vector2 desiredCenterOfScreen)
