@@ -17,6 +17,8 @@ namespace golemgame.Managers
 
         public Vector2 topLeft { get { return camera.ScreenToWorld(Vector2.Zero); } }
         public Vector2 bottomLeft { get { return camera.ScreenToWorld(0, screenSize.Y); } }
+        public static int scaleFactor = 2;
+        public float desiredCameraZoom = 2;
 
         public Vector2 mousePosition
         {
@@ -44,16 +46,22 @@ namespace golemgame.Managers
 
         public ViewManager(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphicsDeviceManager, GameWindow gameWindow)
         {
+            // Setting up the screen size
             _graphicsDevice = graphicsDevice;
             graphicsDeviceManager.PreferredBackBufferWidth = (int)screenSize.X;
             graphicsDeviceManager.PreferredBackBufferHeight = (int)screenSize.Y;
-            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice, (int)screenSize.X, (int)screenSize.Y);
-            camera = new OrthographicCamera(viewportAdapter);
-            camera.ZoomIn(2);
-
             graphicsDeviceManager.IsFullScreen = true;
+
+            // Some other graphics device settings
             graphicsDeviceManager.SynchronizeWithVerticalRetrace = true;
             graphicsDeviceManager.ApplyChanges();
+
+            // Creating camera
+            BoxingViewportAdapter viewportAdapter = new BoxingViewportAdapter(gameWindow, graphicsDevice,
+                _graphicsDevice.PresentationParameters.BackBufferWidth / scaleFactor,
+                _graphicsDevice.PresentationParameters.BackBufferHeight / scaleFactor);
+            camera = new OrthographicCamera(viewportAdapter);
+            camera.ZoomIn(desiredCameraZoom / scaleFactor);
         }
 
         public void UpdateCameraPosition(Vector2 desiredCenterOfScreen)

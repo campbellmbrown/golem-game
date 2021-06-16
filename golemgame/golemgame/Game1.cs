@@ -92,8 +92,12 @@ namespace golemgame
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: _viewManager.camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                SamplerState.PointClamp, DepthStencilState.None,
+                RasterizerState.CullCounterClockwise, null,
+                transformMatrix: _viewManager.camera.GetViewMatrix());
 
+            GraphicsDevice.Clear(_backgroundColor);
             switch (_gameState)
             {
                 case (GameState.Playing):
@@ -102,7 +106,6 @@ namespace golemgame
                 default:
                     break;
             }
-
             base.Draw(gameTime);
             _spriteBatch.End();
         }
