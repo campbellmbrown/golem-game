@@ -92,7 +92,16 @@ namespace golemgame
 
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, transformMatrix: _viewManager.camera.GetViewMatrix()); GraphicsDevice.Clear(_backgroundColor);
+
+            // Drawing to the render target instead of the back buffer
+            //GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
+            GraphicsDevice.SetRenderTarget(_viewManager.renderTarget);
+            GraphicsDevice.Clear(_backgroundColor);
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                SamplerState.PointClamp, DepthStencilState.None,
+                RasterizerState.CullCounterClockwise, null,
+                transformMatrix: _viewManager.camera.GetViewMatrix());
 
             switch (_gameState)
             {
@@ -102,8 +111,16 @@ namespace golemgame
                 default:
                     break;
             }
-
             base.Draw(gameTime);
+            _spriteBatch.End();
+
+            // Switching back to the backbuffer
+            GraphicsDevice.SetRenderTarget(null);
+
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                SamplerState.PointClamp, DepthStencilState.None,
+                RasterizerState.CullCounterClockwise, null);
+            _spriteBatch.Draw(_viewManager.renderTarget, Vector2.Zero, null, Color.White, 0f, Vector2.Zero, ViewManager.scaleFactor, SpriteEffects.None, 0f);
             _spriteBatch.End();
         }
     }
