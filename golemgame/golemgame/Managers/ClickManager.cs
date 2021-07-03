@@ -16,20 +16,13 @@ namespace golemgame.Managers
         private bool _leftClickHeldDown;
         private bool _rightClickHeldDown;
 
-        private List<ScreenLevelLeftClick> _screenLevelLeftClicks;
+        private List<ILeftClickable> _screenButtons;
 
-        public class ScreenLevelLeftClick
-        {
-            public ScreenButton button { get; set; }
-            public MethodDelegate outputFunc { get; set; }
-
-            public ScreenLevelLeftClick(ScreenButton button, MethodDelegate outputFunc)
-            {
-                this.button = button;
-                this.outputFunc = outputFunc;
-            }
-        }
-
+        /// <summary>
+        /// This manager checks if buttons are clicked and performs their appropriate action.
+        /// </summary>
+        /// <param name="debugManager">Game debug manager to provide debug prints.</param>
+        /// <param name="viewManager">Game view manager to get mouse position.</param>
         public ClickManager(DebugManager debugManager, ViewManager viewManager)
         {
             _debugManager = debugManager;
@@ -37,13 +30,16 @@ namespace golemgame.Managers
             _leftClickHeldDown = false;
             _rightClickHeldDown = false;
 
-            _screenLevelLeftClicks = new List<ScreenLevelLeftClick>();
+            _screenButtons = new List<ILeftClickable>();
         }
 
+        /// <summary>
+        /// Update method to check mouse clicking and performing appropriate action.
+        /// </summary>
         public void Update()
         {
             MouseState mouseState = Mouse.GetState();
-            // Left click
+
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 if (!_leftClickHeldDown)
@@ -66,26 +62,36 @@ namespace golemgame.Managers
             else _rightClickHeldDown = false;
         }
 
+        /// <summary>
+        /// Checks all the <c>ILeftClickable</c> objects if they have been clicked and performs their action.
+        /// </summary>
         public void LeftClick()
         {
             _debugManager.AddDebugMessage("Left click", DebugLevel.Debug);
-            foreach (var screenLevelLeftClick in _screenLevelLeftClicks)
+            foreach (var screenButton in _screenButtons)
             {
-                if (screenLevelLeftClick.button.clickRectangle.Contains(_viewManager.mousePosition))
+                if (screenButton.IsHovering(_viewManager.mousePosition))
                 {
-                    screenLevelLeftClick.outputFunc();
+                    screenButton.LeftClickAction();
                 }
             }
         }
 
+        /// <summary>
+        /// Checks all the <c>IRightClickable</c> objects if they have been clicked and performs their action.
+        /// </summary>
         public void RightClick()
         {
             _debugManager.AddDebugMessage("Right click", DebugLevel.Debug);
         }
 
-        public void AddScreenLevelLeftClick(ScreenButton button, MethodDelegate func)
+        /// <summary>
+        /// Registers a button to be viable to be clicked.
+        /// </summary>
+        /// <param name="button">The button to be registered.</param>
+        public void AddScreenLevelLeftClick(ILeftClickable button)
         {
-            _screenLevelLeftClicks.Add(new ScreenLevelLeftClick(button, func));
+            _screenButtons.Add(button);
         }
     }
 }
