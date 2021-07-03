@@ -33,7 +33,6 @@ namespace golemgame.GameStates
             _clickManager = new ClickManager(_debugManager, viewManager);
 
             _screenButtons = new List<ScreenButton>();
-            _screenButtons.Add(new ScreenButton(_debugManager, viewManager, Game1.textures["cursor"], new Vector2(20, 10), _clickManager));
         }
 
         public void Update(GameTime gameTime)
